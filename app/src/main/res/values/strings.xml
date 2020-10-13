@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Memeistan</string>
+    <string name="top_memes">Top Memes</string>
+    <string name="fresh_memes">Fresh Memes</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="user_name">Username</string>
+    <string name="password">Password</string>
+    <string name="repeat_password">Repeat Password</string>
+    <string name="login">Login</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="logo">Logo</string>
+    <string name="developed_by_shami">Developed By Shami</string>
+    <string name="register_yourself">Register Yourself</string>
+    <string name="profile_picture">Profile Picture</string>
+    <string name="gender">Gender</string>
+</resources>
