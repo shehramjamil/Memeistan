@@ -3,6 +3,7 @@ package com.example.dagger_android.di.modules
 import com.example.dagger_android.model.RetrofitInterface
 import dagger.Module
 import dagger.Provides
+import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -22,7 +23,7 @@ class ApiModule {
     fun prepareRetrofitForSignUp(): RetrofitInterface {
         val retrofitBuilder = Retrofit.Builder()
             .baseUrl("https://memeistan.000webhostapp.com/")
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHTTPClient())  // We can add http interceptors later
             .build()

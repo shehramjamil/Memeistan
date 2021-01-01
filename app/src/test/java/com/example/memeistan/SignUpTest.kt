@@ -2,6 +2,7 @@ package com.example.memeistan
 
 import android.app.Activity
 import com.example.dagger_android.model.RetrofitInterface
+import com.example.memeistan.business.usecases.SignUpUseCase
 import com.example.memeistan.presentation.ui.signup.SignUpPresenter
 import com.example.memeistan.presentation.ui.signup.SignupViewInterface
 import okhttp3.mockwebserver.MockResponse
@@ -30,7 +31,11 @@ class SignUpTest {
     lateinit var activity: Activity
 
     @Mock
+    lateinit var signUpUseCase: SignUpUseCase
+
+    @Mock
     lateinit var retrofitInterface: RetrofitInterface
+
 
 
     private lateinit var signUpPresenter: SignUpPresenter
@@ -41,7 +46,7 @@ class SignUpTest {
     fun beforeTest() {
         MockitoAnnotations.initMocks(this);
         // Setting up Presenter for Testing
-        signUpPresenter = SignUpPresenter(activity, retrofitInterface)
+        signUpPresenter = SignUpPresenter(activity, signUpUseCase)
         signUpPresenter.attachView(signUpViewInterface)
 
 

@@ -12,16 +12,18 @@ import androidx.core.app.ActivityCompat.startActivityForResult
 import com.example.memeistan.data.model.json.SignUpResponse
 import com.example.dagger_android.model.RetrofitInterface
 import com.example.memeistan.REQUEST_CODE
+import com.example.memeistan.business.usecases.SignUpUseCase
 import com.example.memeistan.presentation.base.BasePresenter
-import io.reactivex.Observer
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observer
+import io.reactivex.rxjava3.disposables.Disposable
+import io.reactivex.rxjava3.schedulers.Schedulers
 import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 
 class SignUpPresenter @Inject constructor(
     private val activity: Activity,
-    private val retrofitInterface: RetrofitInterface
+    private val signUpUseCase: SignUpUseCase
 ) : BasePresenter<SignupViewInterface>(), SignUpPresenterInterface {
 
     private var bitmap: Bitmap? = null
@@ -74,9 +76,11 @@ class SignUpPresenter @Inject constructor(
         gender: String,
         imageString: String
     ) {
-        val retrofitCall =
-            retrofitInterface.getSignUpResponse(userName, password, gender, imageString)
-        retrofitCall.subscribeOn(Schedulers.io()).subscribe(observer())
+        signUpUseCase
+            .execute(userName, password, gender, imageString)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(observer())
     }
 
     private fun observer(): Observer<SignUpResponse> {

@@ -1,25 +1,27 @@
 package com.example.memeistan.presentation.ui.login
 
-import android.content.Context
 import com.example.memeistan.data.model.json.LoginResponse
-import com.example.dagger_android.model.RetrofitInterface
 import com.example.memeistan.business.model.LoginBusinessModel
+import com.example.memeistan.business.usecases.GetLoginResponseUseCase
+import com.example.memeistan.business.usecases.GetLoginStateUseCase
+import com.example.memeistan.business.usecases.InsertLoginDataUseCase
 import com.example.memeistan.presentation.base.BasePresenter
 import com.example.memeistan.data.model.realm.mapper.RealmLoginMapper
-import com.example.memeistan.data.provider.RealmLocalProvider
-import io.reactivex.Observer
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observer
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.disposables.Disposable
+import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 
 class LogInPresenter @Inject constructor(
-    var context: Context,
-    private val retrofitInterface: RetrofitInterface,
-    private val realmLocalProvider: RealmLocalProvider,
-    private val realmLoginMapper: RealmLoginMapper
+    private val realmLoginMapper: RealmLoginMapper,
+    private val getLoginStateUseCase: GetLoginStateUseCase,
+    private val getLoginResponseUseCase: GetLoginResponseUseCase,
+    private val insertLoginDataUseCase: InsertLoginDataUseCase
 ) :
     BasePresenter<LoginViewInterface>(), LoginPresenterInterface {
-
+    val disposables = CompositeDisposable()
 
     override fun loginValidation(userName: String, password: String): String {
         return when {
@@ -30,18 +32,24 @@ class LogInPresenter @Inject constructor(
     }
 
     override fun checkLoginState() {
-        realmLocalProvider.readLoggedUserData().observeOn(Schedulers.io())
+        getLoginStateUseCase
+            .execute()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe(LoginState())
+
     }
 
     override fun tryLoginOnServer(userName: String, password: String) {
-        val retrofitCall = retrofitInterface.getLoginResponse(userName, password)
-        retrofitCall.subscribeOn(Schedulers.io()).subscribe(observer())
+        getLoginResponseUseCase
+            .execute(userName, password)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(loginResponseObserver())
     }
 
     inner class LoginState : Observer<LoginBusinessModel> {
         override fun onSubscribe(d: Disposable) {
-            TODO("Not yet implemented")
         }
 
         override fun onNext(t: LoginBusinessModel) {
@@ -51,38 +59,15 @@ class LogInPresenter @Inject constructor(
         }
 
         override fun onError(e: Throwable) {
-            TODO("Not yet implemented")
+            e.printStackTrace()
         }
 
         override fun onComplete() {
-            TODO("Not yet implemented")
         }
 
     }
 
-
-    private fun loginStateObserver(): Observer<LoginBusinessModel> {
-        return object : Observer<LoginBusinessModel> {
-
-            override fun onComplete() {
-            }
-
-            override fun onSubscribe(p0: Disposable) {
-                //p0.dispose()
-            }
-
-            override fun onNext(response: LoginBusinessModel) {
-                if (response.loginStatus) {
-                    view?.navigateToMainActivity()
-                }
-            }
-
-            override fun onError(p0: Throwable) {
-            }
-        }
-    }
-
-    private fun observer(): Observer<LoginResponse> {
+    private fun loginResponseObserver(): Observer<LoginResponse> {
         return object : Observer<LoginResponse> {
 
             override fun onComplete() {
@@ -94,11 +79,9 @@ class LogInPresenter @Inject constructor(
 
             override fun onNext(response: LoginResponse) {
                 if (response.response == "Login Successful") {
-                    realmLocalProvider.insertLoginData(
-                        realmLoginMapper.loginResponseToUserLoginRealmModel(
-                            response
-                        )
-                    )
+                    val mappedToRealmLoginModel =
+                        realmLoginMapper.loginResponseToUserLoginRealmModel(response)
+                    insertLoginDataUseCase.execute(mappedToRealmLoginModel)
                     view?.navigateToMainActivity()
                 } else {
                     view?.loginServerStatus(response.response)

@@ -16,7 +16,6 @@ class ActivityModule(private var activity: Activity) {
     @Provides
     fun provideContext(): Context = activity
 
-
     @Provides
     fun provideRealmLocalProvider(): RealmLoginMapper = RealmLoginMapper()
 

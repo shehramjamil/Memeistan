@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:background="#000000"
         app:tabGravity="fill"
-        app:tabTextColor="@android:color/background_light"></com.google.android.material.tabs.TabLayout>
+        app:tabTextColor="@android:color/background_light" />
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"

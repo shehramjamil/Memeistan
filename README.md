@@ -1,29 +1,22 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+This repository contains a small app that just includes sign up and login functionality.
+It shows the best practises to use MVP with Dagger2 and Clean Code Architecture.
+It contains the suitable structure for starting a project with clean code principles and reactive programming.
+It also contains the test cases using few testing libraries.
 
-### What is this repository for? ###
+Libraries and Architecture used in this Sample Project App
+1. Clean Code Architecture
+2. MVP
+3. Dagger2
+4. Reactive Programming [Rxjava 3]
+5. Retrofit
+6. Realm Database
+7. Tab Layout and Pager
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
-
-### How do I get set up? ###
-
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
-
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
+For Testing [Testing is not fully complete but many concepts are covered] 
+1. JUNIT 5
+2. Hamcrest Matchers For JUNIT Testing
+3. Parameterized Test
+4. Mock Web Server
+5. Mockito

@@ -6,7 +6,7 @@ import com.example.memeistan.data.model.realm.LoginRealmModel
 import com.example.memeistan.data.model.realm.mapper.RealmLoginMapper
 import com.vicpin.krealmextensions.deleteAll
 import com.vicpin.krealmextensions.queryFirst
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 import io.realm.Realm
 import javax.inject.Inject
 
@@ -28,8 +28,7 @@ open class RealmLocalProvider @Inject constructor(private val realmLoginMapper: 
         when {
             realm.isEmpty -> {
                 realm.close()
-                return Observable.just(
-                    realmLoginMapper.userLoginRealmModelToLoginBusinessModel(realmLoginData!!)
+                return Observable.just(LoginBusinessModel("","",false)
                 )
             }
             else -> {

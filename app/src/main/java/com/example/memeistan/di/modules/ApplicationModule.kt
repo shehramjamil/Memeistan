@@ -11,7 +11,5 @@ class ApplicationModule(private val baseApp: BaseApplication) {
 
     @Singleton
     @Provides
-    fun provideApplication(): Application {
-        return baseApp
-    }
+    fun provideApplication(): Application = baseApp
 }

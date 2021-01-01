@@ -2,7 +2,7 @@ package com.example.dagger_android.model
 
 import com.example.memeistan.data.model.json.LoginResponse
 import com.example.memeistan.data.model.json.SignUpResponse
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
